@@ -1,34 +1,29 @@
-const express = require("express");
-//dotnenv for using .env - enviroment variables
-require("dotenv").config();
-const { OpenAI } = require("openai");
-
+const { OpenAI } = require("openai") 
+require('dotenv').config();
+const express = require('express')
 const app = express();
-app.use(express.json());
+
+app.use(express.json())
 
 const openai = new OpenAI({
-  apiKey: process.env.OPEN_AI_KEY,
-});
+  apiKey : "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"
+}); 
 
-app.post("/chat", async (req, res) => {
+app.post('/chat',async (req,res) => {
   try {
     const prompt = req.body.prompt;
-    const res = await openai.createChatCompletion({
-      model: "text-davinci-003",
-      prompt,
-      max_tokens: 64,
-      temperature: 0.7,
-      stop: ["\n"],
-      n: 1,
-    });
-		res.json({
-			response : res.data.choices[0].text
-		})
+    const completion = await openai.chat.completions.create({
+    messages: [{ role: "user", content: prompt }],
+    model: "gpt-3.5-turbo",
+  });
+  res.json({
+    Response : completion.choices[0]
+  })
   } catch (error) {
-    console.log(error);
+    res.status(500).json({
+      msg : "something went wrong"
+    })
   }
-});
+})
 
-const port = process.env.PORT || 5000;
-
-app.listen(port, () => console.log(`server is listening on PORT ${port}`));
+app.listen(3000);
