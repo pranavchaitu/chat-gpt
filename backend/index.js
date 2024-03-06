@@ -1,12 +1,14 @@
 const { OpenAI } = require("openai") 
 require('dotenv').config();
+
+
 const express = require('express')
 const app = express();
 
 app.use(express.json())
 
 const openai = new OpenAI({
-  apiKey : "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"
+  apiKey : "<api-key>"
 }); 
 
 app.post('/chat',async (req,res) => {
